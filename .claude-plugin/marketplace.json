@@ -1,0 +1,18 @@
+{
+  "name": "eve-kicad-review",
+  "owner": {
+    "name": "Eve Redero",
+    "email": "eve.redero@pasqal.com"
+  },
+  "metadata": {
+    "description": "KiCAD schematic and PCB review skills following Eve's design rules",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "kicad-review",
+      "source": "./plugins/kicad-review",
+      "description": "Review KiCAD schematics and PCBs against Eve's rules. Review-only: never generates or routes designs. Prefers emitting ERC/DRC rules over manual checks."
+    }
+  ]
+}

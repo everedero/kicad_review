@@ -1,0 +1,76 @@
+(version 1)
+
+# Eve's netclass rules.
+#
+# These rules are the PCB half of the netclass policy. They are useless unless the
+# matching netclasses exist in the project and nets are assigned to them. Create the
+# classes in Project > Project Settings > Net Classes first:
+#
+#   POWER      supply nets up to 2 A
+#   HIGHPOWER  supply nets above 2 A (amplifiers, motors, lighting)
+#   MIDFREQ    > 1 MHz square, > 2 MHz sine, or rise time < 400 ns
+#   HIGHFREQ   rise time < 10 ns, > 50 MHz square, or > 100 MHz sine
+#
+# Paste into <project>.kicad_dru, or keep this file and include its rules there.
+# KiCAD has no include directive, so the rules must be copied in.
+
+# --- Power: minimum copper width -------------------------------------------------
+
+(rule "POWER minimum track width"
+  (severity error)
+  (condition "A.NetClass == 'POWER'")
+  (constraint track_width (min 0.25mm))
+)
+
+(rule "HIGHPOWER minimum track width"
+  (severity error)
+  (condition "A.NetClass == 'HIGHPOWER'")
+  (constraint track_width (min 0.4mm))
+)
+
+# --- Fast signals: clearance -----------------------------------------------------
+#
+# Eve's rule is "clearance greater than three times the track width". A DRC rule
+# cannot read the local track width, so these encode 3x the netclass track width.
+# Adjust the numbers if the netclass track width is not the assumed 0.15 mm.
+
+(rule "MIDFREQ clearance"
+  (severity warning)
+  (condition "A.NetClass == 'MIDFREQ'")
+  (constraint clearance (min 0.3mm))
+)
+
+(rule "HIGHFREQ clearance"
+  (severity error)
+  (condition "A.NetClass == 'HIGHFREQ'")
+  (constraint clearance (min 0.45mm))
+)
+
+# --- Fast signals: keep them direct ----------------------------------------------
+#
+# High-speed nets should not change layer. via_count counts vias on the whole net,
+# so the limit is a budget, not a ban: raise it if the net legitimately spans
+# connectors on two sides of the board.
+
+(rule "HIGHFREQ via budget"
+  (severity warning)
+  (condition "A.NetClass == 'HIGHFREQ'")
+  (constraint via_count (max 2))
+)
+
+# --- Fast signals: do not change width mid-course ---------------------------------
+#
+# Expressed as an exact width rather than a minimum, so a widened or necked section
+# is reported. Set these to the real netclass widths of the design.
+
+(rule "MIDFREQ constant track width"
+  (severity warning)
+  (condition "A.NetClass == 'MIDFREQ'")
+  (constraint track_width (min 0.15mm) (max 0.25mm))
+)
+
+(rule "HIGHFREQ constant track width"
+  (severity error)
+  (condition "A.NetClass == 'HIGHFREQ'")
+  (constraint track_width (min 0.15mm) (max 0.2mm))
+)

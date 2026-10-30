@@ -113,3 +113,10 @@ pnpm-debug.log*
 *.rar
 *.tar
 *.zip
+
+# Example boards: three nested git repositories with 20 MB+ artefacts.
+# Kept locally for validating the review skills, never committed here.
+exemples/
+
+# Review scratch space (extracted JSON, DRC/ERC reports, scratch board copies)
+.review-scratch/
