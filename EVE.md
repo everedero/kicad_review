@@ -119,6 +119,9 @@ make it 0.4 mm.
 * Nice to have: a "INPUT" and "OUTPUT" flag, to have an ERC rule to verify for instance,
   that TX RX are crossed, and SCL and SDA are not
 * Setting up an ERC rule and flags to avoid an issue is preferred over creating a skill.
+* If the designer added a flag, consider it intentional, do not report what is flagged.
+  For instance, a connector might have a lot of no-connect flags,
+  it is not an issue worth being alarmed if the no-connect flags are present.
 * Schematic notes should clearly state which voltage ranges and current ranges are applicable for
   the different power nets.
 * Differential pair names must share a prefix and end in \_P and \_N, make sure they always do
@@ -141,6 +144,10 @@ make it 0.4 mm.
   could be removed, no need for this "usb\_dp\_from\_connector" label.
   The exception to that is if the name is important to you and you want to be aware of it while
   routing (feedback nets, etc).
+* In case of passive in series: the functional net is the one after the passive filter part.
+  That is the net that gets the name and the netclass.
+  The stub before do not need a custom name, but should have a netclass to have the right width
+  and clearance.
 
 ## Design for test and for reliability
 ### Testpoint rules
