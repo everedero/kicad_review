@@ -77,6 +77,30 @@ Check these against the netlist, where every net and its pins are listed flat.
   assigned, use the logical pin name for an MCU, and the pin or ball name for an FPGA.
   A netlist full of port names is a Minor finding that becomes Major at bring-up, because
   nothing in the schematic says what the signal is for.
+- **One net, one name.** A label's job is to connect something. A local label that appears
+  exactly once on its sheet makes no connection: it only names. Whether that name earns its
+  place is the question to ask. The classic waste is a label between a connector pin and the
+  series resistor right after it — `usb_dp_from_connector` on one side, `USB_DP` on the
+  other — where the net already has a name further along and now answers to two, depending on
+  where you look. Check the netlist before calling it redundant: if the label is the net's
+  *only* name, deleting it leaves KiCAD to auto-name the net `Net-(J1-Pad1)`, which is worse.
+  The finding is "this label connects nothing", and the fix is either to delete it or to keep
+  it deliberately. List the candidates per sheet:
+
+  ```bash
+  kct sch labels "$SHEET" --format csv | tail -n +2 \
+    | awk -F, '{c[$2]++; t[$2]=$1} END {for (x in c) if (c[x]==1 && t[x]=="local") print x}'
+  ```
+
+  Count every label type but report only the `local` ones: a *hierarchical* label used once
+  is connecting to its parent sheet pin, which is its whole purpose, and flagging those
+  buries the real hits. This is a **Minor** finding and a question rather than a defect,
+  because of Eve's exception: a name worth seeing while routing — a feedback net, a sense
+  line — earns its label even when used once. Ask whether each name is wanted at the board,
+  and do not propose deleting a label whose net you would want to recognise on the PCB.
+
+  This is the per-net view of the label-versus-wire ratio under *Drawing conventions* above;
+  run both, report whichever the sheet actually suffers from, not both at once.
 
 ## Component values
 

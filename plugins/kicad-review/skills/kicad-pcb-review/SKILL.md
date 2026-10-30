@@ -61,10 +61,27 @@ Eve's priority order, highest first. Review in this order and spend the effort h
    clearance more than 3x the track width, good GND around, stitching vias. A crystal with a
    via in its loop is a Major finding.
 2. **High-speed.** Avoid layer changes. Avoid plane crossings under the track — a split in
-   the reference plane under a fast signal breaks the return path. Clearance more than 3x
-   the track width, GND all around, stitching vias.
-3. **Normal GPIO and low-speed** — enables, faults. These may take indirect paths. Do not
-   spend review effort here, and do not report a wandering enable line as a fault.
+   the reference plane under a fast signal breaks the return path. GND all around, stitching
+   vias. Clearance more than 3x the track width **to tracks outside the bus**; see below.
+3. **Enables, resets, chip selects, interrupts and faults.** These may take indirect paths —
+   do not report a wandering enable line as a fault, that is not what matters here. What
+   matters is that they stay **away from high-speed**. A coupled spike on an enable or an
+   interrupt is dire: the part shuts down, resets, or services a phantom interrupt, and the
+   resulting fault is intermittent and extremely hard to trace. An enable line running
+   alongside a fast bus is a Major finding even though the same line taking a scenic route is
+   no finding at all.
+4. **Normal GPIO and low-speed.** Indirect paths are fine. Do not spend review effort here.
+
+**Buses.** A bus is the nets of one peripheral instance — `SPI0_MOSI`/`SPI0_MISO`/`SPI0_CLK`,
+all the DDR nets, all the USB nets. Chip selects, enables and supplies are **not** bus
+members; they are item 3 above.
+
+Nets of the same bus may run close to each other, because they transition at almost the same
+time. **Do not report tight spacing inside a bus.** The 2-3x clearance is owed between the
+bus and everything outside it. Getting this wrong in the other direction is the common
+failure: a flat 3x rule flags every intra-bus pair, and a designer who sees a wall of false
+positives stops reading DRC at all. `kicad-rules` has the `hasNetclass` rule text that
+encodes the asymmetry.
 
 Supporting queries: `kicad-pcb-query BOARD.kicad_pcb vias --format json` and
 `traces --format json`, filtered by net.

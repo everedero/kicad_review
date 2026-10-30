@@ -39,14 +39,16 @@ usually a decision, not an oversight.
 
 ## Step 2: judge the netclasses
 
-Eve's four classes, by function:
+Eve's classes, by function:
 
 | Class | Applies to | Min track width |
 |---|---|---|
 | `POWER` | supply nets up to 2 A | 0.25 mm |
 | `HIGHPOWER` | supply above 2 A: amplifiers, motors, lighting | 0.4 mm |
-| `MIDFREQ` | > 1 MHz square, > 2 MHz sine, or rise time < 400 ns | clearance > 3x width |
+| `MIDFREQ` | > 1 MHz square, > 2 MHz sine, or rise time < 400 ns | clearance > 2x width |
 | `HIGHFREQ` | rise < 10 ns, > 50 MHz square, > 100 MHz sine | clearance > 3x width, few vias |
+| `SENSITIVE` | enables, resets, chip selects, interrupts, faults | kept clear of fast nets |
+| `BUS_<INSTANCE>` | the nets of one peripheral instance, see below | exempt from itself |
 
 Two failure modes, both seen on real boards:
 
@@ -79,21 +81,84 @@ kicad-net-status BOARD.kicad_pcb --by-class --format json
 A `POWER` class that exists but has no nets in it is worse than no class, because it looks
 done.
 
+**Buses and sensitive lines.** A bus is the set of nets of *one peripheral instance*:
+`SPI0_MOSI` + `SPI0_MISO` + `SPI0_CLK`, all the DDR nets, all the USB nets. Chip selects,
+enables and supplies are **not** bus members; they belong in `SENSITIVE`. The distinction
+earns its keep in the PCB rules: bus members may run close to each other because they
+switch at nearly the same time, while `SENSITIVE` lines must stay away from anything fast.
+
+Assign both with `netclass_patterns` in `.kicad_pro` rather than net by net:
+
+```bash
+python3 -c "import json;print(json.load(open('PROJECT.kicad_pro'))['net_settings']['netclass_patterns'])"
+```
+
+Two things to know about patterns, both confirmed against KiCAD 10.0.6:
+
+- **They match the full net name including the sheet path.** A pattern of `SPI0_*` matches
+  nothing on a hierarchical design, where the net is `/Soc/Peripherals/SPI0_MOSI`. Lead with
+  a wildcard or give the full path.
+- **Membership is additive.** A net matching two patterns joins both classes, which is what
+  lets a net be in `HIGHFREQ` and `BUS_SPI0` at once. Note the consequence: on a multi-class
+  net `A.hasExactNetclass('BUS_SPI0')` is **false**, so use `hasNetclass`, not the exact form.
+
+Enumerate bus members one pattern per net instead of globbing `SPI0_*`. KiCAD patterns have
+no exclusion syntax, so a glob drags `SPI0_CS` into the bus — exactly the net Eve excludes.
+
 ## Step 3: the clearance rules need real numbers
 
-`MIDFREQ` and `HIGHFREQ` want "clearance greater than three times the track width". DRC
-cannot read the local track width, so the shipped rules hard-code 3x an assumed netclass
-width. **Read the project's actual netclass width and recompute** before pasting, and say
-in the report which width was assumed.
+`MIDFREQ` and `HIGHFREQ` want "clearance greater than two or three times the track width".
+DRC cannot read the local track width, so the shipped rules hard-code a multiple of an
+assumed netclass width: 2x for `MIDFREQ`, 3x for `HIGHFREQ`. **Read the project's actual
+netclass width and recompute** before pasting, and say in the report which width was assumed.
+
+**The bus asymmetry.** The 3x figure applies between a high-speed net and everything
+*outside* its bus. Inside the bus there is no such requirement. A flat
+`A.NetClass == 'HIGHFREQ'` clearance rule therefore reports every intra-bus pair as a
+violation, which on a routed bus is a wall of false positives that trains the designer to
+ignore DRC.
+
+When the design has buses, swap the flat `HIGHFREQ clearance` rule for the bus-aware one in
+`assets/dru/eve-netclasses.kicad_dru`, adding one clause per bus:
+
+```
+(rule "HIGHFREQ clearance outside the bus"
+  (severity error)
+  (condition "A.hasNetclass('HIGHFREQ') && !(A.hasNetclass('BUS_SPI0') && B.hasNetclass('BUS_SPI0'))")
+  (constraint clearance (min 0.45mm))
+)
+```
+
+**Do not keep both rules, and do not try to solve this with rule order.** DRC evaluates a
+pair under both role assignments, so a flat rule still matches with A and B swapped.
+Last-match-wins ordering gets close but leaks. Measured on a real board carrying 29
+intra-bus pairs:
+
+| Approach | Intra-bus violations |
+|---|---|
+| relaxed intra-bus rule placed first | 31 — no effect |
+| relaxed intra-bus rule placed last | 2 — leaks |
+| exemption inside the condition | 0 |
+
+All three keep bus-to-outside enforcement at roughly 489, so the exemption costs nothing.
 
 The constant-width rules use `(min X) (max Y)` deliberately: Eve's rule is "do not change
 track width mid-course", so a *widened* section is a finding too, not just a necked one.
 
 ## Step 4: ERC flags
 
-Place the three flags from `assets/symbols/eve_flags.kicad_sym`. They are power symbols
-whose pin name is `~`, which, exactly like KiCAD's own `PWR_FLAG`, means they attach to a
-net without renaming it.
+Place the three flags from `assets/symbols/eve_flags.kicad_sym`. They are **not** power
+symbols, and that is deliberate.
+
+**The `(power)` trap.** KiCAD's own `power:PWR_FLAG` carries `(power)` and a pin named `~`,
+and attaches to a net without renaming it. That is a special case inside KiCAD, keyed on the
+symbol, and copying the idiom does not copy the behaviour. Any *other* symbol carrying
+`(power)` acts as a global power label named by its Value field, so every instance of it
+shorts together. Verified on asynth2osc against 10.0.6: with `(power)` present, seven
+`PWR_IN_FLAG`s merged `VBUS`, `5V_CLEAN`, `IN_+12V`, `VDDA`, `3V3_FILT`, `5V` and `+10V`
+into one net, silently — the netlist simply had six fewer nets. Removing `(power)` restored
+the net list exactly. Keep these three symbols non-power; the hidden `#FLG` reference and
+`in_bom no` / `on_board no` already keep them off the BOM and the board.
 
 **`PWR_FLAG` placement.** Eve's rule is that it belongs close to where power actually comes
 from: a connector pin, or a passive sitting in series in the power path such as a coil,
@@ -114,7 +179,27 @@ Do **not** place them on bidirectional nets. SDA and SCL are shared and must not
 crossed; flagging them as input or output produces false errors. This asymmetry — TX/RX
 crossed, SCL/SDA not — is the whole reason the flags exist.
 
-Add the library to the project with Preferences > Manage Symbol Libraries, project tab.
+**What each flag actually raises, measured.** `PWR_IN_FLAG` fires `power_pin_not_driven`
+when the rail it sits on has no `power_out` driver reaching it — which is the point, since
+drive does not propagate across a passive. `OUTPUT_FLAG` × 2 on one net fires `pin_to_pin`
+("Output… Output"). `INPUT_FLAG` alone on a passive-only net raises **nothing** in KiCAD
+10.0.6: an `input` pin needs no driver. Confirmed by swapping that pin to `power_in`, which
+did fire, so ERC does see the symbol. Treat `INPUT_FLAG` as documentation plus the
+counterpart that makes an `OUTPUT_FLAG` conflict meaningful, not as a check in its own right.
+
+Add the library to the project with Preferences > Manage Symbol Libraries, project tab, or
+by hand in `sym-lib-table`:
+
+```
+(lib (name "eve_flags")(type "KiCad")(uri "${KIPRJMOD}/eve_flags.kicad_sym")(options "")(descr "Eve ERC flags"))
+```
+
+**If you ever write flag instances into a `.kicad_sch` by script**, note that the per-sheet
+`lib_symbols` cache prefixes only the *top-level* symbol name (`eve_flags:PWR_IN_FLAG`); the
+unit sub-symbols stay bare (`PWR_IN_FLAG_0_0`). Prefixing the sub-symbols makes KiCAD load
+the whole sheet **empty, with no error and a zero exit code** — the only symptom is a
+netlist that lost that sheet's components. Always diff component and net counts against a
+pre-edit netlist.
 
 ## Step 5: ERC severities
 
@@ -143,8 +228,26 @@ cp proposed.kicad_dru .review-scratch/dru-test/BOARD.kicad_dru
 kicad-cli pcb drc --format json -o /tmp/t.json .review-scratch/dru-test/BOARD.kicad_pcb
 ```
 
-Then confirm no violation has a type mentioning rule or syntax. A `.kicad_dru` that KiCAD
-rejects is worse than no rule, because the project looks protected and is not.
+**Running DRC is not a validation.** `kicad-cli` accepts a broken `.kicad_dru` in silence.
+Verified against 10.0.6: a file with an unbalanced paren, and a file calling a misspelled
+`hasNetclassTYPO()`, both reported exactly the same violation count as the correct file,
+with no error, no warning and a zero exit code. There is no `rule` or `syntax` violation
+type to look for. A rule can also parse perfectly and match nothing, which looks identical.
+
+So prove the rule *fires*, with the absurd-constraint technique:
+
+1. Run DRC with no custom rules to get the **baseline** count.
+2. Copy the proposed rule in and widen its constraint until it must be violated —
+   `(constraint clearance (min 8mm))`. Re-run.
+3. **The count must rise above baseline.** If it does not, the rule is either unparsed or
+   matching nothing; both are failures, and the DRC run cannot tell you which.
+4. Check the violations name the nets you expect, not just that the number moved. Counts
+   saturate — several different conditions all produced exactly 499 clearance violations on
+   one test board, so identity is the real evidence.
+5. Restore the real constraint value.
+
+A `.kicad_dru` that KiCAD rejects is worse than no rule, because the project looks
+protected and is not — and nothing in the tooling will tell you.
 
 Known syntax traps, from Eve's own existing rules:
 
@@ -155,4 +258,12 @@ Known syntax traps, from Eve's own existing rules:
 - The exclusion-then-assertion pair is how to express "there is no X near Y": one rule with
   `(severity ignore)` to absorb the acceptable pairs, a second with
   `(constraint assertion ...)` to report what is left.
-- Rules are evaluated last-match-wins per constraint type, so order matters.
+- Rules are evaluated last-match-wins per constraint type, so order matters. Do not lean on
+  it to carve an exception out of a broader rule: a pair is evaluated under both A/B role
+  assignments, so the broad rule matches again with the roles swapped. Put the exception in
+  the broad rule's own condition instead.
+- `A.hasNetclass('X')` tests membership and is what to use when a net may hold several
+  classes. `A.hasExactNetclass('X')` is false as soon as the net joins a second class.
+  `A.NetClass == 'X'` still matches a multi-class net in 10.0.6, so the existing rules in
+  `eve-netclasses.kicad_dru` are not broken by patterns — but prefer `hasNetclass` for
+  anything testing the B side, which `A.NetClass` cannot express.

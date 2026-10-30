@@ -68,9 +68,24 @@ decided, and rules should be added to it rather than replacing it.
 | Nets on one sheet | `kct nets "$SHEET" --net VCC` |
 | Unconnected pins on one sheet | `kct sch unconnected "$SHEET"` |
 | Wire versus label balance on one sheet | `kct sch wires "$SHEET" --stats` |
+| Labels on one sheet, by type | `kct sch labels "$SHEET" --format csv` |
+| Local labels that connect nothing | the one-liner below |
 
 `kicad-sch-hierarchy` follows sheet instances from the root sheet, so pass the root
 `.kicad_sch`, not a child.
+
+`kct sch labels` emits `Type,Text,Sheet,Sheet File,X,Y,Rotation,Shape,UUID`. A local label
+whose text occurs exactly once on the sheet connects nothing:
+
+```bash
+kct sch labels "$SHEET" --format csv | tail -n +2 \
+  | awk -F, '{c[$2]++; t[$2]=$1} END {for (x in c) if (c[x]==1 && t[x]=="local") print x}'
+```
+
+Count all types, report only `local`: a hierarchical label used once is connecting to its
+parent sheet pin and is not a finding. The tool escapes some characters in label text — a
+`/` comes back as `{slash}` — so treat the output as a candidate list to look at, not as
+text to paste back into the design.
 
 **The `kct sch*` commands do not.** They read exactly the one file given. On a hierarchical
 design the root sheet is mostly sheet blocks, so `kct symbols root.kicad_sch` answers

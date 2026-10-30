@@ -64,6 +64,15 @@ kicad-cli sym export svg -o /tmp/symsvg plugins/kicad-review/assets/symbols/eve_
 A `.kicad_dru` that KiCAD rejects is worse than no rule: the project looks protected and is
 not. Always validate after editing.
 
+**But running DRC does not validate anything.** `kicad-cli` 10.0.6 accepts a broken
+`.kicad_dru` in silence: an unbalanced paren and a misspelled function each reported the
+same violation count as the correct file, with no error and a zero exit code. A rule can
+also parse and match nothing, which looks identical. To actually validate, widen the
+constraint until the rule must fire — `(constraint clearance (min 8mm))` — and confirm the
+count rises above the no-custom-rules baseline *and* that the violations name the nets you
+expect. Counts saturate, so identity is the evidence, not the number. See
+`plugins/kicad-review/skills/kicad-rules/SKILL.md`, "Checking your own rules".
+
 ## Validation boards
 
 `exemples/` holds three real boards from three designers, with real flaws. They are nested

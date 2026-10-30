@@ -10,9 +10,16 @@
 #   HIGHPOWER  supply nets above 2 A (amplifiers, motors, lighting)
 #   MIDFREQ    > 1 MHz square, > 2 MHz sine, or rise time < 400 ns
 #   HIGHFREQ   rise time < 10 ns, > 50 MHz square, or > 100 MHz sine
+#   SENSITIVE  enables, resets, chip selects, interrupt and fault lines
 #
 # Paste into <project>.kicad_dru, or keep this file and include its rules there.
 # KiCAD has no include directive, so the rules must be copied in.
+#
+# WARNING: kicad-cli accepts a broken .kicad_dru in silence. A file with an
+# unbalanced paren or a misspelled function reports the same violation count as
+# a correct one. Never conclude a rule works because DRC ran. Validate by
+# temporarily setting the constraint absurdly tight (clearance min 8mm) and
+# confirming the violation count rises and names the nets you expect.
 
 # --- Power: minimum copper width -------------------------------------------------
 
@@ -30,9 +37,15 @@
 
 # --- Fast signals: clearance -----------------------------------------------------
 #
-# Eve's rule is "clearance greater than three times the track width". A DRC rule
-# cannot read the local track width, so these encode 3x the netclass track width.
-# Adjust the numbers if the netclass track width is not the assumed 0.15 mm.
+# Eve's rule is "clearance greater than two or three times the track width". A DRC
+# rule cannot read the local track width, so these encode a multiple of the assumed
+# 0.15 mm netclass track width: 2x for MIDFREQ, 3x for HIGHFREQ. Adjust both numbers
+# if the netclass track width is not 0.15 mm.
+#
+# These fire between a fast net and ANY other net, including another net of the same
+# bus. If the design has real buses, replace the HIGHFREQ rule with the bus-aware
+# version at the end of this file. Do not keep both: a flat HIGHFREQ clearance rule
+# reports every intra-bus pair, and no amount of rule ordering will suppress it.
 
 (rule "MIDFREQ clearance"
   (severity warning)
@@ -74,3 +87,63 @@
   (condition "A.NetClass == 'HIGHFREQ'")
   (constraint track_width (min 0.15mm) (max 0.2mm))
 )
+
+# --- Sensitive lines: keep them away from fast nets -------------------------------
+#
+# A coupled spike on an enable, a reset or an interrupt is dire: the part shuts
+# down, resets, or takes a phantom interrupt, and the fault is intermittent and
+# very hard to find. These lines may take indirect paths, but not paths that run
+# alongside something fast.
+#
+# Note the OR on the B side: B.hasNetclass is needed here because the test is
+# "is the other item fast", which A.NetClass cannot express.
+
+(rule "SENSITIVE clearance to fast nets"
+  (severity warning)
+  (condition "A.hasNetclass('SENSITIVE') && (B.hasNetclass('HIGHFREQ') || B.hasNetclass('MIDFREQ'))")
+  (constraint clearance (min 0.45mm))
+)
+
+# --- High-speed buses --------------------------------------------------------------
+#
+# A bus is the set of nets of ONE peripheral instance: SPI0_MOSI + SPI0_MISO +
+# SPI0_CLK, or all the DDR nets, or all the USB nets. Chip selects, enables and
+# supplies are NOT bus members — put those in SENSITIVE.
+#
+# Nets of the same bus may run close together, because their transitions happen at
+# almost the same time. The 3x clearance applies between the bus and everything
+# outside it. That asymmetry is what the negated clause below buys: without it, a
+# flat HIGHFREQ clearance rule reports every intra-bus pair as a violation.
+#
+# This rule is a template naming a netclass that probably does not exist yet. That is
+# safe: a rule referencing an unknown netclass simply never matches, and does not
+# invalidate the rest of the file (verified on 10.0.6 — the rule after it still fired).
+#
+# Bus names are per-board, so this is a template. For each bus:
+#   1. Create a netclass BUS_<INSTANCE> in Project Settings > Net Classes.
+#   2. Assign its members with netclass_patterns, one pattern per net, using the
+#      full net name including the sheet path. Enumerate the members rather than
+#      globbing SPI0_* — KiCAD patterns have no exclusion syntax, and a glob would
+#      drag SPI0_CS into the bus.
+#   3. Replace the plain "HIGHFREQ clearance" rule above with the rule below, and
+#      add one more "&& !(A.hasNetclass(...) && B.hasNetclass(...))" clause per bus.
+# Membership is additive, so a net stays in HIGHFREQ while also being in its bus.
+#
+# The exemption has to live INSIDE this rule's condition. Do not try to do it with a
+# separate relaxed intra-bus rule and last-match-wins ordering: DRC evaluates a pair
+# under both role assignments, so a flat "A.hasNetclass('HIGHFREQ')" rule still
+# matches with the roles swapped. Measured on a real board, 29 intra-bus pairs:
+#   exemption rule placed first -> 31 intra-bus violations (no effect)
+#   exemption rule placed last  ->  2 intra-bus violations (leaks)
+#   self-exempting condition    ->  0 intra-bus violations
+# all three keeping bus-to-outside enforcement at ~489.
+
+(rule "HIGHFREQ clearance outside the bus"
+  (severity error)
+  (condition "A.hasNetclass('HIGHFREQ') && !(A.hasNetclass('BUS_SPI0') && B.hasNetclass('BUS_SPI0'))")
+  (constraint clearance (min 0.45mm))
+)
+
+# Intra-bus pairs fall through to the bus netclass clearance, which is what lets them
+# run close. Set that netclass clearance to 2x the track width if you want a floor
+# there too.

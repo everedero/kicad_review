@@ -236,6 +236,9 @@ nets should not be treated as equals. Priorities go to:
       good clearance, and preferably GND all around, with stitching vias. It’s OK to keep nets
       wires from the same bus quite close, because transitions happen almost at the same time,
       but keep good clearance (>2 or 3 times the track width) between the bus and the other tracks.
+      Same bus means nets belonging to the same peripheral instance.
+      For instance: all the nets for one SPI (SPI0\_MOSI, SPI0\_MISO, SPI0\_CLK), all the nets
+      for DDR, all the nets for USB... Chip select and enables and supplies excluded.
     * Be careful about enables, interrupt lines: try to keep them away from high-speed because
       the consequences of a spike can be dire.
     * Normal GPIOs and low-speed signals, such as enables, faults, can have less direct paths

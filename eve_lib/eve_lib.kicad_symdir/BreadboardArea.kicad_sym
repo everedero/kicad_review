@@ -2,7 +2,7 @@
 	(version 20251024)
 	(generator "kicad_symbol_editor")
 	(generator_version "10.0")
-	(symbol "BREADBOARD_AREA"
+	(symbol "BreadboardArea"
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board yes)
@@ -28,7 +28,7 @@
 				)
 			)
 		)
-		(property "Footprint" "PASQAL_Misc_Footprint_Library:BBZ_15x15_TOP"
+		(property "Footprint" "Eve_lib:Breadboard_area_15x15"
 			(at 3.81 -8.255 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61,7 +61,7 @@
 				)
 			)
 		)
-		(property "ki_fp_filters" "BBZ*"
+		(property "ki_fp_filters" "*Breadboard*area*"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -72,7 +72,7 @@
 				)
 			)
 		)
-		(symbol "BREADBOARD_AREA_1_1"
+		(symbol "BreadboardArea_1_1"
 			(rectangle
 				(start -2.54 4.445)
 				(end 2.54 -4.445)

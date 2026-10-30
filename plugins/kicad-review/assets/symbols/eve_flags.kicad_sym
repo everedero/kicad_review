@@ -3,7 +3,6 @@
 	(generator "eve_kicad_review")
 	(generator_version "9.0")
 	(symbol "PWR_IN_FLAG"
-		(power)
 		(pin_numbers
 			(hide yes)
 		)
@@ -104,7 +103,6 @@
 		(embedded_fonts no)
 	)
 	(symbol "INPUT_FLAG"
-		(power)
 		(pin_numbers
 			(hide yes)
 		)
@@ -205,7 +203,6 @@
 		(embedded_fonts no)
 	)
 	(symbol "OUTPUT_FLAG"
-		(power)
 		(pin_numbers
 			(hide yes)
 		)
