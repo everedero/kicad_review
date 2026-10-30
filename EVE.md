@@ -287,3 +287,7 @@ least as wide, for the DC return path.
 * Board name, board version
 * Silkscreen should state what goes where and give a good starting point on how to use the PCB.
 * No white or yellow soldermask because optical inspection will fail
+
+<!--
+Licensed under GPL-V3
+-->

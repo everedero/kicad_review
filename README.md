@@ -34,3 +34,4 @@ My advice is that you human-review it and human-modify it before robot-using it.
 * High-voltage designs (> 35V DC or AC)
 * Designs involving batteries, battery chargers
 
+EVE.md is open-source. The license is GPL-V3.
