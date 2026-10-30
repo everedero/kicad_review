@@ -114,7 +114,7 @@ make it 0.4 mm.
 * The "PWR\_FLG" should be closed to where the power comes from: from a connector pin,
   from a passive component in series in the power path (for coils, shunts, fuses...).
 * Nice to have: create a "PWR\_IN\_FLAG" to extend the power path check:
-  if a passive component is in series in the power path,
+  if a passive component (or a set of series passive components) is in series in the power path,
   this flag adds a power input to the power net.
 * Nice to have: a "INPUT" and "OUTPUT" flag, to have an ERC rule to verify for instance,
   that TX RX are crossed, and SCL and SDA are not
