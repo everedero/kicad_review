@@ -151,6 +151,7 @@ make it 0.4 mm.
 * If the designer excludes an ERC or DRC type, bring it back for the review.
   It can be legit to waive an ERC or DRC, but it is always useful to check what they say.
   KiCad default exclusions can stay excluded.
+* For I2C components, add their 7-bit address or addresses next to the symbol.
 
 ## Design for test and for reliability
 ### Testpoint rules
