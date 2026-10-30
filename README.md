@@ -9,6 +9,8 @@ The goal is to use this as a seed to generate LLM skills.
 As the name suggest, most of it is my personal view on things.
 My advice is that you human-review it and human-modify it before robot-using it.
 
+This repository also contains libraries with my weird custom components.
+
 ## Scope
 
 * Schematics
