@@ -32,6 +32,18 @@ exemples/                         three real boards for validation (gitignored)
 - **Prefer a rule over a report.** A finding that can be a `.kicad_dru` rule, an ERC
   severity or an ERC flag should be delivered as that, with text to paste.
 - Code and comments in English.
+- **Know the boundary with the companion.** This plugin owns netclasses, `.kicad_dru`, ERC
+  flags and severities, design for test, and schematic/PCB conventions. Component *values*,
+  datasheet facts (enable pins, strapping pins, pin direction, absolute maximums), analog
+  subcircuit behaviour and BOM verification belong to the optional `aklofas/kicad-happy`
+  companion, which lives outside this repo and is never vendored in. Do not grow a skill into
+  its half, and do not report a finding both skills produce twice — see
+  `plugins/kicad-review/skills/kicad-review/references/upstream-verdicts.md`.
+- **BOM: verify, never source.** MPN coverage, obsolescence and single-sourcing are review
+  findings and are in scope. Pricing, stock, carts and order files are not. The MPN check runs
+  offline; lifecycle needs distributor credentials and is deliberately not wired up.
+- **No API keys in this repo.** Distributor credentials live in `~/.config/secrets.env` and are
+  never committed, never printed, and never required for a review to complete.
 
 ## Commands
 

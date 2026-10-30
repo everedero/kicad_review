@@ -46,6 +46,12 @@ Stop and tell Eve before going further if the board is mainly:
 Do not silently review these. Say which parts are out of scope, then review the parts that
 are in scope. A board with some analog on it is fine; an analog board is not.
 
+Out of scope is not the same as unhelpful. When the analog or mixed-signal part is the
+reason the guard fired, say so, review the digital and interconnection parts in full, and
+point at the companion in Step 5b for the analog part — it has op-amp, filter and crystal
+detectors that this plugin deliberately does not. That is a pointer, not a review: the
+analog verdict stays Eve's.
+
 ## Step 2: tooling check
 
 Run the doctor before extracting anything, so a missing tool is a one line fix rather than
@@ -101,6 +107,64 @@ Load only what the board needs:
 
 A schematic-only project skips `kicad-pcb-review`. An early design skips teardrops and
 silkscreen polish; say so rather than reporting them as faults.
+
+## Step 5b: hand off what this plugin does not check
+
+Some questions are out of these four skills' reach, because they need the component
+datasheet or a distributor catalogue rather than the design files:
+
+| Question | Owner |
+|---|---|
+| Is this resistor, divider, filter or load cap the right **value**? | companion |
+| What does the datasheet say — enable pins, strapping pins, pin direction, absolute maximum? | companion |
+| Op-amp, filter and analog subcircuit behaviour | companion |
+| Does every BOM line carry an MPN? Is a part obsolete or single-sourced? | companion |
+| Netclasses, `.kicad_dru`, ERC flags, design for test, conventions | this plugin |
+
+The companion is `aklofas/kicad-happy`, optional and installed outside this repo. Check
+for it, and hand off only the rows above:
+
+```bash
+H=~/.local/share/kicad-happy/skills/kicad/scripts
+test -f $H/analyze_schematic.py && echo present || echo absent
+```
+
+Install command and the measured evidence are in `references/upstream-verdicts.md`.
+
+If it is absent, do not fail and do not install it unasked. Finish the review and say
+plainly which questions went unchecked, so Her Majesty knows what the review does not
+cover rather than assuming silence means clean.
+
+### BOM: verify, never source
+
+Review the BOM, do not shop for it.
+
+| In scope — verification | Out of scope — sourcing |
+|---|---|
+| Does every line carry an MPN? | What does it cost? |
+| Is a part obsolete, NRND or last-time-buy? | Is it in stock? |
+| Is any part single-sourced? | Which cart or order file to generate |
+| Is the temperature grade adequate? | "Find me a part" |
+
+The MPN check needs no API key and no network — it is in the plain `analyze_schematic.py`
+output under `sourcing_audit`, so it always runs. Report `mpn_coverage` and the
+`missing_mpn` reference list.
+
+Ignore `missing_digikey`. It fires on every board Eve has, because her boards carry
+manufacturer part numbers and no distributor part numbers. That is correct practice for a
+lab that orders from DigiKey, Mouser and Farnell alike, not a finding.
+
+Obsolescence, single-sourcing and temperature grade need distributor credentials and are
+**not wired up**. Do not ask for keys and do not run `--lifecycle`. The analyzer already
+reports the gap itself as `LC-007 — "Lifecycle audit not run"`; carry that line into the
+report, so a board full of obsolete parts is never mistaken for a clean one.
+`references/upstream-verdicts.md` records how to enable it when Eve wants it.
+
+If it is present, treat it as a second opinion, never as a verdict. It does not know Eve's
+rules. Drop its testpoint-coverage and silkscreen findings, which `kicad-dft-review` and
+`kicad-pcb-review` already own and judge by stricter rules, and drop its JLCPCB DFM
+scoring entirely. Keep its value, datasheet and analog findings, and re-judge each one
+against Eve's rules before reporting it.
 
 ## Step 6: report
 
