@@ -148,6 +148,8 @@ make it 0.4 mm.
   That is the net that gets the name and the netclass.
   The stub before do not need a custom name, but should have a netclass to have the right width
   and clearance.
+* If the designer excludes an ERC or DRC type, bring it back for the review.
+  It can be legit to waive an ERC or DRC, but it is always useful to check what they say.
 
 ## Design for test and for reliability
 ### Testpoint rules
