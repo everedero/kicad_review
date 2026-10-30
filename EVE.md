@@ -116,7 +116,7 @@ make it 0.4 mm.
 * Nice to have: create a "PWR\_IN\_FLAG" to extend the power path check:
   if a passive component (or a set of series passive components) is in series in the power path,
   this flag adds a power input to the power net.
-* Nice to have: a "INPUT" and "OUTPUT" flag, to have an ERC rule to verify for instance,
+* Nice to have: a SIG\_IN\_FLAG" and "SIG\_OUT\_FLAG", to have an ERC rule to verify for instance,
   that TX RX are crossed, and SCL and SDA are not
 * Setting up an ERC rule and flags to avoid an issue is preferred over creating a skill.
 * If the designer added a flag, consider it intentional, do not report what is flagged.
