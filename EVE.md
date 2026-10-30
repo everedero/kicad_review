@@ -150,6 +150,7 @@ make it 0.4 mm.
   and clearance.
 * If the designer excludes an ERC or DRC type, bring it back for the review.
   It can be legit to waive an ERC or DRC, but it is always useful to check what they say.
+  KiCad default exclusions can stay excluded.
 
 ## Design for test and for reliability
 ### Testpoint rules
