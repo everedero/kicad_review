@@ -1,0 +1,115 @@
+# macOS metadata and thumbnails
+.DS_Store
+.localized
+__MACOSX/
+.AppleDouble
+.LSOverride
+Icon[]
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows system files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux temporary files
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+nohup.out
+
+# Nano saves and history
+*.save
+*.nano
+.nano_history
+
+# Vim swap and session files
+[._]*.s[a-v][a-z]
+[._]swp
+[._]swn
+[._]swo
+[._]sw?
+
+# Emacs
+\#*\#
+.\#*
+
+# VS Code (Ignores personal extensions/state but keeps shared settings)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (IntelliJ, PyCharm, WebStorm, etc.)
+.idea/
+*.iws
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Never commit credentials or local environment settings
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+.htpasswd
+
+# Shell and language history
+.bash_history
+.zsh_history
+.python_history
+.node_repl_history
+.mysql_history
+.php_history
+
+# Cloud Sync / Backup
+.Dropbox
+.dropbox.attr
+.dropbox.cache
+
+# History & Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archives
+*.7z
+*.gz
+*.rar
+*.tar
+*.zip
