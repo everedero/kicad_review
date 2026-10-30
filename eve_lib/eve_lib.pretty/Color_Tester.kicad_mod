@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 (footprint "Color_Tester"
+=======
+(footprint "pcb_art_tester"
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	(version 20260206)
 	(generator "pcbnew")
 	(generator_version "10.0")
@@ -7,7 +11,11 @@
 		(at 0 4 0)
 		(unlocked yes)
 		(layer "F.SilkS")
+<<<<<<< HEAD
 		(uuid "3d2d9b12-bf9f-4aa2-9bb4-f391405be4ed")
+=======
+		(uuid "77f1a3a0-76fe-4cd6-8e9c-974ee6e297cc")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +27,11 @@
 		(at 0 5.5 0)
 		(unlocked yes)
 		(layer "F.Fab")
+<<<<<<< HEAD
 		(uuid "4a7a6990-9dcb-47af-91bd-00779b20741b")
+=======
+		(uuid "7f10ef19-3107-4018-a4de-b08db253a9db")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(effects
 			(font
 				(size 1 1)
@@ -32,7 +44,11 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
+<<<<<<< HEAD
 		(uuid "1a5aeb10-8199-4f3d-a3f6-6dbf68851d6c")
+=======
+		(uuid "4124c3da-c60c-4f42-a6cb-b81b816ba5b3")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(effects
 			(font
 				(size 1 1)
@@ -45,7 +61,11 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
+<<<<<<< HEAD
 		(uuid "47b42f50-0147-4634-a791-e2d5a8caee42")
+=======
+		(uuid "28b1202c-0414-415f-ae9a-1d88fb9c00da")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(effects
 			(font
 				(size 1 1)
@@ -64,7 +84,11 @@
 		)
 		(fill yes)
 		(layer "F.Mask")
+<<<<<<< HEAD
 		(uuid "0ea973ca-20b0-48c2-88e0-9af748121741")
+=======
+		(uuid "178c4431-ebba-4dcb-b141-a9762d1d1a97")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(fp_rect
 		(start 1 -1)
@@ -75,7 +99,11 @@
 		)
 		(fill yes)
 		(layer "F.Mask")
+<<<<<<< HEAD
 		(uuid "3fd93b51-4316-4d42-a388-87b6a2326bfd")
+=======
+		(uuid "fb633d63-bd2c-470b-98e0-9a2ffc2e9be1")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(fp_rect
 		(start 1 1)
@@ -86,7 +114,11 @@
 		)
 		(fill yes)
 		(layer "F.Mask")
+<<<<<<< HEAD
 		(uuid "395bb78c-4bf1-49ac-9904-125baf09582b")
+=======
+		(uuid "e1f88b25-b7c7-4303-948c-e0553628496e")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(fp_rect
 		(start -3 -3)
@@ -97,6 +129,7 @@
 		)
 		(fill yes)
 		(layer "B.Mask")
+<<<<<<< HEAD
 		(uuid "6ce48d94-60c4-4123-9311-ef005ed80183")
 	)
 	(fp_rect
@@ -109,6 +142,9 @@
 		(fill yes)
 		(layer "In1.Cu")
 		(uuid "e6a133d1-e94d-495c-89ef-ee08513591b2")
+=======
+		(uuid "fa4ea445-f2ee-4fbc-b0d7-64100c3960ab")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(fp_rect
 		(start 0.999999 -3)
@@ -119,7 +155,11 @@
 		)
 		(fill yes)
 		(layer "F.SilkS")
+<<<<<<< HEAD
 		(uuid "fe90b850-c5ad-4ebb-85eb-de447627aaf6")
+=======
+		(uuid "4166bc4e-64aa-4b2f-90ee-39ee5901be64")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(fp_rect
 		(start 1 -1)
@@ -130,13 +170,21 @@
 		)
 		(fill yes)
 		(layer "F.SilkS")
+<<<<<<< HEAD
 		(uuid "2925e31a-1609-4894-8258-ca8f0c5e5f3a")
+=======
+		(uuid "ad76503e-35f8-473a-bd70-3b148b142acc")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(fp_text user "${REFERENCE}"
 		(at 0 7 0)
 		(unlocked yes)
 		(layer "F.Fab")
+<<<<<<< HEAD
 		(uuid "b628dfb9-6bd5-4bef-85f8-95a7daae4068")
+=======
+		(uuid "4e5cdfea-d3cf-4335-8208-0373528f2239")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(effects
 			(font
 				(size 1 1)
@@ -148,19 +196,37 @@
 		(at -2 -1.999999)
 		(size 1.999998 1.999998)
 		(layers "F.Cu" "F.Mask")
+<<<<<<< HEAD
 		(uuid "1aa9fb4b-517e-4153-b30d-fb9b18d71d2f")
+=======
+		(uuid "2aba8015-11b9-4598-b355-618bd25859d2")
+	)
+	(pad "1" smd rect
+		(at -2 2 270)
+		(size 1.999998 1.999998)
+		(layers "B.Cu")
+		(uuid "9cb0990a-7c01-4c39-85fb-546e4a1fcfa1")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(pad "1" smd rect
 		(at -0.000001 -2)
 		(size 2 2)
 		(layers "F.Cu")
+<<<<<<< HEAD
 		(uuid "6efbac27-07fc-4864-b830-b47ac0c574a5")
+=======
+		(uuid "cb80e650-cba8-4157-a873-3b58ef787f1f")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(pad "1" smd rect
 		(at 2 2 270)
 		(size 1.999998 1.999998)
 		(layers "B.Cu" "B.Mask")
+<<<<<<< HEAD
 		(uuid "d6fdf295-b71e-42fa-8ed4-3c0413fd8af3")
+=======
+		(uuid "015d067f-37c0-47a2-b0fd-d42a94a9cdc4")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 	)
 	(zone
 		(layers "F.Cu" "F.Mask" "B.Cu" "B.Mask" "In1.Cu" "F.SilkS" "In2.Cu" "B.SilkS"
@@ -169,7 +235,11 @@
 			"In18.Cu" "In19.Cu" "In20.Cu" "In21.Cu" "In22.Cu" "In23.Cu" "In24.Cu"
 			"In25.Cu" "In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu" "In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "d218fcaf-7845-468d-a18b-20dc35a833c8")
+=======
+		(uuid "47243b57-96cb-4cb5-8e6d-8f9246cc396f")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -204,7 +274,11 @@
 			"In19.Cu" "In20.Cu" "In21.Cu" "In22.Cu" "In23.Cu" "In24.Cu" "In25.Cu"
 			"In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu" "In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "a9234f5d-f719-4aec-99e2-117a5c86f170")
+=======
+		(uuid "d2cf6b50-1859-464b-82c6-21c3e6f1f6c1")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -234,7 +308,11 @@
 	)
 	(zone
 		(layers "F.Cu" "F.Mask" "B.Cu" "B.Mask" "In1.Cu" "B.SilkS")
+<<<<<<< HEAD
 		(uuid "094873be-838c-4b67-8935-b281701efe4a")
+=======
+		(uuid "2c83f327-95f6-4cc6-82b5-40949551a897")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -269,7 +347,11 @@
 			"In19.Cu" "In20.Cu" "In21.Cu" "In22.Cu" "In23.Cu" "In24.Cu" "In25.Cu"
 			"In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu" "In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "909a4cb8-a690-4eb1-b7be-1e32dda3f499")
+=======
+		(uuid "649e34e6-36f3-449f-962b-b358aa79d5e1")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -298,6 +380,7 @@
 		)
 	)
 	(zone
+<<<<<<< HEAD
 		(layers "F.Cu" "F.Mask" "B.Cu" "F.SilkS" "B.SilkS")
 		(uuid "f8100aca-da73-49a8-8336-a0036d518176")
 		(hatch edge 0.5)
@@ -328,13 +411,19 @@
 		)
 	)
 	(zone
+=======
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(layers "F.Cu" "B.Cu" "B.Mask" "In1.Cu" "F.SilkS" "In2.Cu" "B.SilkS" "In3.Cu"
 			"In4.Cu" "In5.Cu" "In6.Cu" "In7.Cu" "In8.Cu" "In9.Cu" "In10.Cu" "In11.Cu"
 			"In12.Cu" "In13.Cu" "In14.Cu" "In15.Cu" "In16.Cu" "In17.Cu" "In18.Cu"
 			"In19.Cu" "In20.Cu" "In21.Cu" "In22.Cu" "In23.Cu" "In24.Cu" "In25.Cu"
 			"In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu" "In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "e3454639-9bee-4749-8631-f6f02879a2a0")
+=======
+		(uuid "5b2f56bb-1dca-4980-86cd-f243d3c5a362")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -369,7 +458,11 @@
 			"In23.Cu" "In24.Cu" "In25.Cu" "In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu"
 			"In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "adc02986-6147-4133-80ff-479c4dc91d16")
+=======
+		(uuid "5cff0267-e552-46aa-a4a5-943e698023bd")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -404,7 +497,11 @@
 			"In23.Cu" "In24.Cu" "In25.Cu" "In26.Cu" "In27.Cu" "In28.Cu" "In29.Cu"
 			"In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "8d6a5189-49bc-4d6d-8ed7-7e8a70a32a57")
+=======
+		(uuid "2bfc799b-08e3-489c-809a-c992e91c53a8")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -439,7 +536,11 @@
 			"In20.Cu" "In21.Cu" "In22.Cu" "In23.Cu" "In24.Cu" "In25.Cu" "In26.Cu"
 			"In27.Cu" "In28.Cu" "In29.Cu" "In30.Cu"
 		)
+<<<<<<< HEAD
 		(uuid "86594166-82fa-457a-986c-50b0b20c05fc")
+=======
+		(uuid "0593ae19-49bd-4b7d-9eea-2478a6d88513")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
@@ -469,7 +570,11 @@
 	)
 	(zone
 		(layers "F.Mask" "B.Cu" "B.Mask" "In1.Cu" "B.SilkS")
+<<<<<<< HEAD
 		(uuid "1e7fe499-496c-492e-acb2-f6a047d51b77")
+=======
+		(uuid "c0dc8205-2053-4494-9b2d-9ac9ca24a417")
+>>>>>>> 79be029 ([FEAT] Weird component libraries)
 		(hatch edge 0.5)
 		(connect_pads
 			(clearance 0)
