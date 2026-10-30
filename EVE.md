@@ -287,6 +287,10 @@ least as wide, for the DC return path.
   like an ESP32 doing the hard part for you).
 * If SMD components are equipped on both sides, 4-layer is possible, but it will fail EMC, even with
   the best care in the world. Suggest using at least 6-layers.
+* At least one GND via close to each GND pad.
+* If you need several via to move current without overheating, the number of via should match on
+  each side of your component. Typically for your big decoupling capacitor, if you put 3 via on
+  VDD side, put 3 via on GND side.
 
 ## Silkscreen
 * If the board is equipped with pick-and-place, Eve says, do not put all the component identifier
