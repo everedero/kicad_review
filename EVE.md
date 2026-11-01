@@ -152,6 +152,9 @@ make it 0.4 mm.
   It can be legit to waive an ERC or DRC, but it is always useful to check what they say.
   KiCad default exclusions can stay excluded.
 * For I2C components, add their 7-bit address or addresses next to the symbol.
+* For the complex ICs, check for silicon errata. If you find one, give advice to the designer
+  to read it. Then process the errata: if there is a suspicion that the design is impacted by
+  something in the errata, warn the user.
 
 ## Design for test and for reliability
 ### Testpoint rules
