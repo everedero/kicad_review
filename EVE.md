@@ -44,6 +44,19 @@ Then launch Claude with:
 claude --plugin-dir ~/.local/share/kicad-happy
 ```
 
+Ignored or rewritten parts:
+* Diff pair length-matching check: will trigger overengineered meander creation on otherwise fine
+  diff pairs, compute the diff but do not flag the result.
+* Ignore the following:
+    * CP-002: No opposite-layer copper under ref
+    * DFM-001: board too big for JLCPCB cheap manufacturing
+    * OR-001: passive orientation, for manufacturing advising to align passive the same
+    * DS-001/002: no datasheet directory found, for kicad-happy cache
+    * missing\_digikey, missing\_lcsc: fire when reference lack distributor part number.
+      I advise to get the manufacturer and MPN right but not to provide distributor numbers.
+    * trust\_level: a metric to tell if the report is based on mostly deterministic things or not.
+      Could lead to unwanted optimisation, ignore it.
+
 ### pann/kicad-aisch
 
 * Mostly aimed at generating schematics for KiCAD 9.
