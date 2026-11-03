@@ -34,6 +34,16 @@ Interesting for:
 * BOM skills: with Digikey, Mouser and Element14
     * Provide a lifecycle analysis
 
+Clone it in .local/share for your agent:
+```
+git clone https://github.com/aklofas/kicad-happy ~/.local/share/kicad-happy
+```
+
+Then launch Claude with:
+```
+claude --plugin-dir ~/.local/share/kicad-happy
+```
+
 ### pann/kicad-aisch
 
 * Mostly aimed at generating schematics for KiCAD 9.
