@@ -328,6 +328,10 @@ least as wide, for the DC return path.
 * Silkscreen should state what goes where and give a good starting point on how to use the PCB.
 * No white or yellow soldermask because optical inspection will fail
 
+# Other checks
+* If a Spice simulation is provided for a sub-circuit, check the component values in the
+  simulation match what was put in the actual circuit.
+
 <!--
 Licensed under GPL-V3
 -->
