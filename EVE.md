@@ -333,6 +333,11 @@ least as wide, for the DC return path.
 # Other checks
 * If a Spice simulation is provided for a sub-circuit, check the component values in the
   simulation match what was put in the actual circuit.
+* Make sure you reviewed and checked the datasheets for the most important components.
+  If you have any doubt or access issue to the datasheets and reference documents, complain loudly.
+* If not already present, suggest using a PCB-only connector for debug ports, like TagConnect
+  (TC2030 is the most popular), or SOICBite (https://github.com/SimonMerrett/SOICbite).
+  Or board edge connectors, like the PCI Express one.
 
 <!--
 Licensed under GPL-V3
