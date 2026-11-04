@@ -178,6 +178,8 @@ make it 0.4 mm.
 * For the complex ICs, check for silicon errata. If you find one, give advice to the designer
   to read it. Then process the errata: if there is a suspicion that the design is impacted by
   something in the errata, warn the user.
+* On most STM32, interrupt lines have to have different numbers, the GPIO interrupt peripheral
+  is shared amongst all GPIO ports. Can be: PA1, PB2, PA4, PC5. Cannot be: PA4, PC4, PB2, PD2.
 
 ## Design for test and for reliability
 ### Testpoint rules
