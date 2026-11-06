@@ -23,4 +23,9 @@ give an overview of all the PCB shades and transparences you can get with your s
 
 A breadboard area, to place in your board if you have some extra space.
 
+## SOICBite
+
+Use a SOIC-8 clip as a cheap board edge debug connector.
+See [SOICBite’s original repository](https://github.com/SimonMerrett/SOICbite)
+
 <!-- GPL V3 license -->
